@@ -1,0 +1,9 @@
+References: 
+https://www.geoib.com/normal-distribution.html
+
+https://www.udacity.com/
+	Data Analyst Program
+	
+https://github.com/agapic/Data-Analyst-Nanodegree-Udacity
+
+https://github.com/baocongchen/Explore-and-Summarize-Data/blob/master/projectTemplate.Rmd

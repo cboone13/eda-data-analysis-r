@@ -1,0 +1,547 @@
+Red Wine Analysis with R By Christopher Boone
+========================================================
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, packages}
+# Load all of the packages and surpress messages.
+
+library(ggplot2)
+library(knitr)
+library(dplyr)
+
+```
+
+```{r echo=FALSE, Load_the_Data}
+# Load the Data
+myData <- read.csv(file='wineQualityReds.csv')
+
+```
+
+The wineQualityReds data set contains 12 variables that describe different 
+aspects of 1599 different red wines. The variables consist of: fixed acidity,
+volatile acidity, citric acid, residual sugar, chlorides, free sulfur dioxide,
+total sulfur dioxide, density, pH, sulphates, alcohol, and quality.
+
+# Univariate Plots Section
+
+
+```{r echo=FALSE, message=FALSE, Univariate_Plots}
+
+qplot(x = quality, data = myData, bins = 10,
+      main = 'Count of Red Wine by Quality',
+      xlab = 'Quality',
+      ylab = 'Count') +
+  stat_count(breaks = 3:8)
+
+```
+
+We can see by this graph that the wine quality has an even distribution and 
+is centralized  on 5 and 6 which gives us an approx median of 6.
+
+
+
+
+
+
+```{r echo=FALSE}
+str(myData)
+myData$quality.level <- ifelse(myData$quality < 5, "Below Average", 
+                             ifelse(myData$quality < 7, 
+                                    "Average", "Above Average"))
+myData$quality.level <- factor(myData$quality.level, 
+                             levels=c("Above Average", 
+                                      "Average", "Below Average"), ordered=TRUE)
+attach(myData)
+
+```
+
+
+```{r echo=FALSE}
+
+qplot(x = alcohol, data = myData, bins = 25,
+      main = 'Count of Red Wine by Alcohol Content',
+      xlab = 'Alcohol Content',
+      ylab = 'Count')
+
+```
+
+When we tak a count of wines by alcohol content we can see that the count is 
+right skewed. We can also see that we have some outliers in the data set.
+
+```{r echo=FALSE}
+
+qplot(x = residual.sugar, data = myData, bins = 25,
+      main = 'Count of Red Wine by Residual Sugar Content',
+      xlab = 'Risidual Sugar',
+      ylab = 'Count')
+
+median(residual.sugar)
+
+mean(residual.sugar)
+
+```
+
+We can see that residual sugar is right skewed and have a few 
+groups of outliers. The median sits at 2.2 and a mean of 2.54.
+
+```{r echo=FALSE}
+
+qplot(x = sulphates, data = myData, bins = 25,
+      main = 'Count of Red Wine by Sulphate Levels',
+      xlab = 'Sulphates',
+      ylab = 'Count')
+
+median(sulphates)
+
+mean(sulphates)
+
+
+```
+
+
+We can see that Sulphates are Right skewed with a median of 0.62 and
+mean of 0.658
+
+
+```{r echo=FALSE}
+
+qplot(x = free.sulfur.dioxide, data = myData, bins = 75,
+      main = 'Count of Red Wine by Free Sulfur Dioxide Amounts',
+      xlab = 'Free Sulfur Dioxide Amounts',
+      ylab = 'Count')
+
+median(free.sulfur.dioxide)
+
+mean(free.sulfur.dioxide)
+
+```
+
+With sulfur Dioxide counts we have a right skewed graph with median of 14
+and mean of 15.87.
+
+
+```{r echo=FALSE}
+
+qplot(x = total.sulfur.dioxide, data = myData, bins = 25,
+      main = 'Count of Red Wine by Total Sulfur Dioxide Amounts',
+      xlab = 'Total Sulfur Dioxide Amounts',
+      ylab = 'Count')
+
+median(total.sulfur.dioxide)
+
+mean(total.sulfur.dioxide)
+
+```
+
+We can see that Total Sulfur Dioxide amounts are right skewed with some far 
+outliers. The median is 38 and mean is 46.47.
+
+
+```{r echo=FALSE}
+
+qplot(x = density, data = myData, bins = 20,
+      main = 'Count of Red Wine by Density',
+      xlab = 'Density',
+      ylab = 'Count')
+
+median(density)
+
+mean(density)
+
+```
+
+We can see that Density has a normal distribution with a median of 0.99675 and 
+mean of 0.9967467.
+
+
+```{r echo=FALSE}
+
+qplot(x = pH, data = myData, bins = 40,
+      main = 'Count of Red Wine by pH Levels',
+      xlab = 'pH',
+      ylab = 'Count')
+
+median(pH)
+
+mean(pH)
+
+```
+
+We can see that pH levels have a normal distribution with a median of 3.31 and
+mean of 3.311113.
+
+
+```{r echo=FALSE}
+
+qplot(x = citric.acid, data = myData, bins = 40,
+      main = 'Count of Red Wine by Citric Acid Content',
+      xlab = 'Citric Acid',
+      ylab = 'Count')
+
+```
+
+We can see that Citric Acid Content has a non-normal distribution.
+
+
+```{r echo=FALSE}
+
+qplot(x = volatile.acidity, data = myData, bins = 40,
+      main = 'Count of Red Wine by Volitile Acidity',
+      xlab = 'Volatile Acidity',
+      ylab = 'Count')
+
+median(volatile.acidity)
+
+mean(volatile.acidity)
+
+```
+
+The distribution of Volatile Acidity seems to have a right skew to it that 
+has a median of 0.52 and mean of 0.528.
+
+```{r echo=FALSE}
+
+qplot(x = fixed.acidity, data = myData, bins = 40 ,
+      main = 'Count of Red Wine by Fixed Acidity',
+      xlab = 'Fixed Acidity',
+      ylab = 'Count')
+
+a = median(fixed.acidity)
+
+b = mean(fixed.acidity)
+
+```
+
+The distribution of Fixed Acidity has a right skew to it that 
+has a median of 7.9 and mean of 8.319637.
+
+# Univariate Analysis
+
+### What is the structure of your dataset?
+This dataset contains 12 variables on 1599 different red wines. 
+
+We can also see that:
+
+  Median quality of 5.5
+  
+  Most of the variables are right skewed.
+  
+  The bulk of the wines pH levels range from 3 to 3.6
+  
+  There are some outliers that exist that may need to be ommitted 
+      in further analysis.
+
+### What is/are the main feature(s) of interest in your dataset?
+I am mainly focusing on the quality as compared pH levels. 
+I want to see if there is a coorrelation between how the quality
+of wine is rated and the various acidity types.
+
+### What other features in the dataset do you think will help support your \
+investigation into your feature(s) of interest?
+
+The acidity levels will also play a factor in this data set due to that fact 
+that they directly impact the pH levels.
+
+### Did you create any new variables from existing variables in the dataset?
+
+I created groupings of quality based on the normal distribution of the count of
+wines by quality. This led me to create three groups which consists of:
+
+Above Average > 7
+Average < 7 > 5
+Below Average   < 5
+
+By doing this it will help me to categorize the sets and make it easier to see
+any differences that may lie between the win qualities.
+
+### Of the features you investigated, were there any unusual distributions? \
+Did you perform any operations on the data to tidy, adjust, or change the form \
+of the data? If so, why did you do this?
+
+As I used an existing dataset that was already clean I did not perform any 
+cleaning operations. One graph that did stand out was the Citric Acid which had
+a non-normal distribution.
+
+
+# Bivariate Plots Section
+
+```{r echo=FALSE, Bivariate_Plots}
+
+ggplot(aes(x = quality.level, y = alcohol), data = myData) +
+  geom_boxplot()
+
+```
+
+This plot shows that the higher rated wines tend to have a higher alcohol 
+content. It is interesting to see that there is a slight dip in alcohol content
+when you move from the below average to average groups of wine.
+
+```{r echo=FALSE}
+
+ggplot(aes(x = quality.level, y = volatile.acidity), data = myData) +
+  geom_boxplot()
+
+```
+
+From this graph we see that there is an obvious relationship between the quality
+of a wine and the volitile acidity level. Lower the volatile acidity,
+higher the quality of wine.
+
+```{r echo=FALSE}
+
+ggplot(aes(x = quality.level, y = fixed.acidity), data = myData) +
+  geom_boxplot()
+
+```
+
+From this graph we see that there is an obvious relationship between the quality
+of a wine and the fixed acidity level. Higher the fixed acidity, 
+higher the quality of wine.
+
+
+```{r echo=FALSE}
+
+ggplot(aes(x = quality.level, y = citric.acid), data = myData) +
+  geom_boxplot()
+
+```
+
+From this graph we see that there is an obvious relationship between the quality
+of a wine and the citric acid level. Higher the citric acid, 
+higher the quality of wine.
+
+
+```{r echo=FALSE}
+
+qplot(x = alcohol, density, data = myData,
+      xlab = 'Density',
+      ylab = 'Alcohol')
+
+```
+
+We can see by this plot that the density tends to be lower for higher quality
+wines though the range is much larger than the other groupings.
+
+```{r echo=FALSE}
+
+qplot(x = fixed.acidity, citric.acid, data = myData,
+      xlab = 'Fixed Acidity',
+      ylab = 'Citric Acid')
+
+```
+
+# Bivariate Analysis
+
+### Talk about some of the relationships you observed in this part of the \
+investigation. How did the feature(s) of interest vary with other features in \
+the dataset?
+
+I observed:
+
+  The relationship of citric acid to quality is negative.
+  The relationship of fixed acidity to quality is negative.
+  The relationship of volitile acidity to quality is positive.
+  
+I found it interesting that there was a slight dip in the alcohol content range
+for the average grouping when compared to the other tow groups. It is also
+interesting to see that the volitive and fixed acidity levels when compared to
+quality level are inverse of each other.
+
+This shows us that people tend to enjoy windes that have a higher level of 
+fixed acidity and citric acid while maintaining lower levels 
+of volatile acidity.
+
+### Did you observe any interesting relationships between the other features \
+(not the main feature(s) of interest)?
+
+Some of the interesting things I observed were:
+
+  The relationship of alcohol to density is negative.
+
+  THe relationship of fixed acidity to citric acid is positive.
+
+### What was the strongest relationship you found?
+
+I found that Quality is most strongly associated with higher fixed 
+acidity as well as lower volatile acidity.
+
+By using this relationship I believe it would be possible to accuratly determine
+what quality level a wine would be rated from these characteristics.
+
+# Multivariate Plots Section
+
+```{r echo=FALSE, Multivariate_Plots}
+
+ggplot(aes(x = fixed.acidity, y = volatile.acidity),
+       data = subset(myData, !is.na(quality.level))) +
+      geom_point(aes(color = quality.level)) 
+      
+```
+
+We can see here that lower quality wines tend to have higher volatile acidity
+while having a lower fixed acidity. There are a few outliers in the below average
+range that violate this.
+
+We can also see that above average wines tend to have a volitile acidity no more
+than .8. Seeing this I can tell that volitile acidity has a much more 
+significant affect on wine quality than fixed acidity does.
+
+
+```{r echo=FALSE}
+
+
+ggplot(data = myData,
+       aes(x = citric.acid, y = fixed.acidity,
+                      color = quality.level)) +
+  geom_point() +
+  facet_wrap(quality.level)
+
+      
+```
+
+Here we can see that across the three groups that as fixed acidity and citric 
+acid increase, the quality level decreases.
+
+```{r echo=FALSE}
+
+
+ggplot(data = myData,
+       aes(x = volatile.acidity, y = fixed.acidity,
+                      color = quality.level)) +
+  geom_point() +
+  facet_wrap(quality.level)
+      
+```
+
+From here we can see that as the quality of the wine increases, the higher the
+fixed acidity and lower the volatile acidity become.+
+
+```{r echo=FALSE}
+
+
+ggplot(data = myData,
+       aes(x = volatile.acidity, y = citric.acid,
+                      color = quality.level)) +
+  geom_point() +
+  facet_wrap(quality.level)
+      
+```
+This graph shows that citric acid doesn't always have a significant impact on
+the quality of the wine.
+
+# Multivariate Analysis
+
+### Talk about some of the relationships you observed in this part of the \
+investigation. Were there features that strengthened each other in terms of \
+looking at your feature(s) of interest?
+
+When comparing quality level, fixed acidity, and citric acid together and 
+splitting it into their respective groups it became easier to see how the 
+presence of high fixed acidity and citric acid are indicators of a wines 
+quality.
+
+The other thing that stood out to me was the relationship of volatile acidity,
+fixed acidity, and quality went together. The graph helped to make clear that 
+fixed acidity has less of an impact on wine quality than volatile does.
+
+### Were there any interesting or surprising interactions between features?
+
+Overall, I found that comparing what I believe to be the key indicators to rate
+a quality wine that citric acid had less of a determining factor. Yes, you can 
+see that as the overall quality of wine increases, the citric acid content 
+gets higher but the final graph did a good job of showing the overlap with 
+citric acid that exists between the three groups.
+
+------
+
+# Final Plots and Summary
+
+### Plot One
+```{r echo=FALSE, Plot_One}
+
+
+ggplot(data = myData,
+       aes(x = citric.acid, y = fixed.acidity,
+                      color = quality.level)) +
+  geom_point() +
+  labs(x = 'Fixed Acidity', y = 'Citric Acid') +
+  ggtitle('Plot One: Fixed Acidity vs Citric Acid by Quality Level') +
+  facet_wrap(quality.level) 
+
+      
+```
+
+### Description One
+
+I chose this graph because I think it does the best job at showing how 
+citric acid and fixed acidity are two of the more influential factors when
+it comes to the quality of a wine.
+
+### Plot Two
+```{r echo=FALSE, Plot_Two}
+
+ggplot(aes(x = quality.level, y = citric.acid, fill = quality.level),
+       data = myData, 
+       ) +
+  geom_boxplot() +
+  labs(x = 'Quality Level', y = 'Citric Acid', fill = 'Quality Level') +
+  ggtitle('Plot 2: Citric Acid vs Quality Level')
+
+```
+
+### Description Two
+
+Here we can see that citric acid is proven to have a positive relationship with
+the quality of wine. It is interesting to see that the range of what is 
+considered an above average wine in relation to citric acid content
+is much smaller than the average and below average groups. I also find it 
+intregueing that there is a lot of overlap between the average and 
+above average groups.
+
+### Plot Three
+```{r echo=FALSE, Plot_Three}
+ggplot(aes(x = quality.level, y = fixed.acidity, fill = quality.level),
+       data = myData) +
+  geom_boxplot() +
+  labs(x = 'Quality Level', y = 'Fixed Acidity', fill = 'Quality Level') +
+  ggtitle('Plot 2: Fixed Acidity vs Quality Level')
+```
+
+### Description Three
+
+Lastly, I selected this graph because it shows the other acid that has one of
+the greater impacts on the quality of wine. Using the second and third plot
+you can better understand what you are seeing in the first plot and gain a 
+deeper understanding of what the information is showing.
+------
+
+# Reflection
+
+WThe red wine dataset contained information on 1599 different red wines and 
+12 different attributes on each. As I preformed my exploration I tried to find
+different ways to visualize the relationship of the various acid types and how 
+it affects the quality of the wine. I discovered that some styles of plots are
+much better at presenting less specific data where as others are best for 
+comparing single variables. For instance, I had to break the jitter plot into
+the three seperate quality groups because if I kept them overlapped it makes it
+difficult to pull any meaning from the plot. The use of single variable plots
+and graphs allows you to gain more granular insight on specific attributes. 
+By doing this I can better understand the behavior of the dataset and identify
+any anamolies that may make interpreting a more complex, multivariable graph
+difficult.
+
+Moving forward, I believe growing this dataset to the point that it looks at
+the geographic location of the people who rate the wines would be a great 
+benefit. With that, we could identify each country and the preferred attributes
+that they like in their wine. By doing this the wine makers would be able to
+start targeting different countries and allocate wines with certain 
+characteristics to areas that best prefer them.
+
+### Struggles / Successes
+
+Throughout the project I spent a lot of time inputing different graph types for
+the same metrics over and over to see which did best to represent the 
+information I was looking at. I struggle for a bit in trying to find a graph 
+that was easy to read without getting too confusing with points on top of 
+points. I ended up discovering how to apply facet_wrap to point and jitter 
+plots which allowed me to reduce the clutter making the plots more readable 
+and easy to use.
