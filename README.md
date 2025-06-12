@@ -71,3 +71,11 @@ Each row in the dataset represents a unique wine sample, evaluated based on its 
 
 ---
 
+## 📂 Project Structure
+eda-wine-quality-r/
+├── data/
+│ └── wineQualityReds.csv
+├── scripts/
+│ └── RedWineAnalysis_Knit.html
+│ └── RedWineAnalysis_RMD.rmd
+└── README.md
