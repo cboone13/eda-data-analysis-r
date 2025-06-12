@@ -1,5 +1,5 @@
 # udacity_data_analysis_with_r
-Udacity data analyist nandegree - exploratory data analysis project that utilizes R to apply various techniques to explore relationships in one variable to multiple variables and to explore a selected data set for distributions, outliersm and anomalies.
+Udacity data analyist nandegree - exploratory data analysis project that utilizes R to apply various techniques to explore relationships in one variable to multiple variables and to explore a selected data set for distributions, outliers, and anomalies.
 
 ### Why this project?
 Exploratory Data Analysis (EDA) is the numerical and graphical examination of data characteristics and relationships before formal, rigorous statistical analyses are applied.
