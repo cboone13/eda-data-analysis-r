@@ -18,6 +18,18 @@ EDA is a crucial step in the data analysis pipeline, helping uncover relationshi
 
 ---
 
+## 📎 Acknowledgments
+
+This project was completed as part of the **Udacity Data Analyst Nanodegree** program.  
+The dataset was sourced from the **[UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/datasets/Wine+Quality)** and is made available under public license for educational and research use.
+
+---
+
+
+## ⚖️ License
+
+This repository is provided for educational purposes only under the [MIT License](LICENSE).
+
 ## 🎯 Why This Project Matters
 
 EDA is not just about making plots — it's about making sense of data before you build models. It helps:
